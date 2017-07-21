@@ -38,9 +38,20 @@
 
         if( nickname == null || nickname == '' ) {
 
-          nickname = "Invité";
+          nickname = "Guest";
 
         }
+
+        // ------ Gestion du 'is_typing'
+        $('#m').on( 'keypress' , function() {
+
+          if( $('#m').val() != '' ){
+
+            socket.emit( 'is_typing' , nickname );
+
+          }
+
+        });
 
         // ------ Gestion de l'envoi de messages
         $('form').submit( function() {
@@ -61,6 +72,12 @@
         });
 
         socket.on( 'connection message' , function( msg ) {
+
+          $('#messages').append( $('<li>').text( msg ) );
+
+        });
+
+        socket.on( 'broadcast' , function( msg ) {
 
           $('#messages').append( $('<li>').text( msg ) );
 
